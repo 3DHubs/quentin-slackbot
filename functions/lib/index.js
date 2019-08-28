@@ -13,9 +13,9 @@ exports.search = functions.https.onRequest((_request, _response) => {
     if (_request.body.event.username && _request.body.event.username === "quentin") {
         return;
     }
-    if (_request.body.event.text.includes("-woof ")) {
+    if (_request.body.event.text.includes(`-${functions.config().commands.chat_general} `)) {
         const generalChannelId = functions.config().slack.channel_general;
-        const generalMessage = _request.body.event.text.replace("-woof ", "");
+        const generalMessage = _request.body.event.text.replace(`-${functions.config().commands.chat_general} `, "");
         const generalResponseTwoBody = {
             channel: generalChannelId,
             text: generalMessage
@@ -36,7 +36,6 @@ exports.search = functions.https.onRequest((_request, _response) => {
     // search confluence articles
     const regex = / /gi;
     const searchTerm = _request.body.event.text;
-    const confluenceSearchTerm = searchTerm.replace(regex, "+");
     const talkSearchTerm = searchTerm.replace(regex, "%20");
     let messageTwo = "Searching for the term - `" + searchTerm + "`. Woof! \n\n";
     messageTwo += "Have you tried searching on the <https://www.notion.so/3dhubs/3D-Hubs-Employee-Handbook-f0711d3c541942e280a36d2c5dca1263|Employee Handbook>? \n\n";
